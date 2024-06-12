@@ -71,8 +71,10 @@ function (Controller, JSONModel, Filter, FilterOperator) {
             } else {
                 oFilter = null;
             }
+            var oTable = this.byId("uploadTable");
+            var oBinding = oTable.getBinding("items");
 
-
+            oBinding.filter(oFilter);
         }
     })
 })
