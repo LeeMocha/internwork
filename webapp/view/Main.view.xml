@@ -32,7 +32,11 @@
                             suggestionItems="{path: 'buModel>/'}"
                             valueHelpRequest="handleValueHelp"
                             change="buseoChange"
+                            tokenUpdate="onTokenUpdate"
                             >
+                            <m:tokens>
+                                <m:Token key="{buModel>Bukey}" text="{buModel>Butxt}"></m:Token>
+                            </m:tokens>
                             <c:Item key="{buModel>Bukey}" text="{buModel>Butxt}" />
                         </m:MultiInput>
                         <!-- <m:Label text="부서" />

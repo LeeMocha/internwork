@@ -93,13 +93,14 @@ function (Controller, JSONModel, Filter, FilterOperator, MessageBox, MessageToas
                                 this._getODataDelete(oMainModel, param).done(function(aReturn){
                 
                                     this.onSearch();
-                                    MessageBox.alert('정상적으로 삭제되었습니다.')
                                 }.bind(this)).fail(function(){
                                     // chk = false;
                                 }).always(function(){
                     
                                 });     
                             })
+                            
+                            MessageBox.alert('정상적으로 삭제되었습니다.')
                         }
                     }
                 })
@@ -276,8 +277,37 @@ function (Controller, JSONModel, Filter, FilterOperator, MessageBox, MessageToas
         },
 
         navToUpload: function(){
-            console.log("************진입했냐")
             this.navTo("Upload", {});
+        },
+
+        tokenDelete : function(oEvent) {
+            var oToken = oEvent.getParameter("token"); // 삭제할 토큰 객체
+            var sButxtToDelete = oToken.getText(); // 토큰의 텍스트 값 (Butxt)
+            console.log(oToken);
+            console.log(sButxtToDelete);
+            // searchModel 가져오기
+            var oModel = this.getView().getModel("searchModel");
+            var aBuname = oModel.getProperty("/Buname");
+
+            // Buname 배열에서 해당 Butxt 값을 가진 요소 제거
+            var iIndex = aBuname.indexOf(sButxtToDelete);
+            if (iIndex !== -1) {
+                aBuname.splice(iIndex, 1);
+                oModel.setProperty("/Buname", aBuname);
+            }
+
+            // 모델 업데이트
+            oModel.refresh();
+        },
+
+        onTokenUpdate: function(oEvent) {
+            var aRemovedTokens = oEvent.getParameter("removedTokens");
+
+            if (aRemovedTokens && aRemovedTokens.length > 0) {
+                aRemovedTokens.forEach(function(oToken) {
+                    this.tokenDelete({ getParameter: function() { return oToken; } });
+                }.bind(this));
+            }
         },
 
         _applyFinter: function(){
