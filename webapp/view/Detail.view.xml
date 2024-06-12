@@ -1,0 +1,55 @@
+<mvc:View controllerName="internwork.controller.Detail"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns:f="sap.ui.layout.form"
+	xmlns:c="sap.ui.core"
+    xmlns:i="sap.m.InputType"
+    xmlns="sap.m">
+    <Page id="page" title="{i18n>title}">
+        <content>
+            <OverflowToolbar style="Clear">
+                <Title id="info_title" text="직원정보" titleStyle="H3" />
+                <ToolbarSpacer></ToolbarSpacer>
+                <Button text="{= ${oModel>/isCreate} ? '초기화' : '취소'}" press=".onReset" type="Default"></Button>
+                <Button text="{= ${oModel>/isCreate} ? '저장' : '수정'}" press=".onSave" type="Emphasized"></Button>
+            </OverflowToolbar>
+            <f:SimpleForm id="InsuranceEdit"
+            editable="true"
+            layout="ColumnLayout"
+            columnsL="2"
+            
+            >
+                <f:content>
+                    <Label text="성명" required="true"/>
+                    <Input width="14rem" value="{viewModel>/Name}" editable="{oModel>/isCreate}" placeholder="필수 입력"></Input>
+                    <Label text="부서명" required="true"/>
+                    <Select width="14rem" 
+                    items="{ path: 'buModel>/' }"
+                    selectedKey="{viewModel>/Buname}"
+                    editable="{oModel>/isCreate}"
+                    >
+                        <c:Item key="{buModel>Butxt}" text="{buModel>Butxt}" />
+                    </Select>
+                    <Label text="휴대전화" />
+                    <Input width="14rem" type="Tel" value="{viewModel>/Mobile}"  editable="{oModel>/isCreate}"></Input>
+                    <Label text="인턴여부" />
+                    <CheckBox selected="{= ${viewModel>/Inyn} ==='N' ? false : true }" select=".checkBoxSelect" editable="{oModel>/isCreate}"></CheckBox>
+                    <Label text="입사일" />
+                    <DatePicker value="{viewModel>/Hiredate}" 
+                    width="14rem" displayFormat="yyyy-MM-dd"
+                    valueFormat="yyyy-MM-dd"
+                    editable="{oModel>/isCreate}" required="true" >
+                    </DatePicker>
+                    <Label text="이메일" />
+                    <Input width="14rem" type="Email" value="{viewModel>/Email}" editable="{oModel>/isCreate}"></Input>
+                    <Label text="내선전화" />
+                    <Input width="14rem" type="Tel" value="{viewModel>/Phone}" editable="{oModel>/isCreate}"></Input>
+                    <Label text="대표전화"></Label>
+                    <RadioButtonGroup columns="2" select=".radioSelect" editable="{oModel>/isCreate}" selectedIndex="{= ${viewModel>/Maintel}==='M' ? 0 : 1}" >
+                        <RadioButton text="휴대전화"></RadioButton>
+                        <RadioButton text="내선전화"></RadioButton>
+                    </RadioButtonGroup>
+                </f:content>
+            </f:SimpleForm>
+        </content>
+    </Page>
+</mvc:View>

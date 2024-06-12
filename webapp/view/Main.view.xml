@@ -1,0 +1,186 @@
+<mvc:View controllerName="internwork.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.ui.table"
+	xmlns:u="sap.ui.unified"
+	xmlns:c="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:v="sap.ui.comp.valuehelpdialog"
+    xmlns:fb="sap.ui.comp.filterbar"
+	xmlns:m="sap.m">
+    <m:Page id="page" title="{i18n>title}">
+        <m:content>
+            <m:Panel>
+                <m:content>
+                        <m:OverflowToolbar style="Clear">
+                            <m:Title id="searchbar_title" text="조회조건" titleStyle="H3"/>
+                            <m:ToolbarSpacer></m:ToolbarSpacer>
+                            <m:Button text="초기화" press=".onSearchInit" type="Default"></m:Button>
+                            <m:Button text="조회" press=".onSearch" type="Emphasized"></m:Button>
+                        </m:OverflowToolbar>
+                </m:content>
+                <f:SimpleForm id="InsuranceEdit"
+                editable="true"
+                layout="ColumnLayout"
+                columnsL="3"
+                >
+                    <f:content>
+                        <m:Label text="성명" />
+                        <m:Input width="14rem" value="{searchModel>/Keyword}"></m:Input>
+                        <m:Label text="부서명" width="100%" labelFor="multiInput"/>
+                        <m:MultiInput width="14rem"
+                            id="multiInput"
+                            suggestionItems="{path: 'buModel>/'}"
+                            valueHelpRequest="handleValueHelp"
+                            change="buseoChange"
+                            >
+                            <c:Item key="{buModel>Bukey}" text="{buModel>Butxt}" />
+                        </m:MultiInput>
+                        <!-- <m:Label text="부서" />
+                        <m:Select id="buSelect"
+                        width="14rem" items="{ path: 'buModel>/'}"
+                        selectedItem="{searchModel>/Buname}"
+                        change=".buseoChange"
+                        >
+                            <c:Item key="{buModel>/Butxt}" text="{buModel>Butxt}"/>
+                        </m:Select> -->
+                        <m:Label text="입사일" />
+                        <m:DatePicker value="{searchModel>/Hiredate}" 
+                        width="14rem" displayFormat="yyyy-MM-dd" 
+                        valueFormat="yyyy-MM-dd"                  
+                        ></m:DatePicker>
+			        </f:content>
+                </f:SimpleForm>
+            </m:Panel>
+            <m:Panel>
+                <m:content>
+                    <!-- <fb:FilterBar id="filterbar" persistencyKey="myPersKey" useToolbar="true" search=".onFilter" filterChange=".onFilterChange" afterVariantLoad=".onAfterVariantLoad">
+                        <fb:filterGroupItems>
+                            <fb:FilterGroupItem name="BuFilter" label="부서명" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <m:MultiComboBox
+                                        name="BuFilter"
+                                        selectionChange=".onFilterBarChange"
+                                        items="{
+                                            path: 'buModel>/'
+                                        }"
+                                    >
+                                        <c:Item key="{buModel>Butxt}" text="{buModel>Butxt}" enabled="{= ${buModel>Butxt}!=='선택'}"/>
+                                    </m:MultiComboBox>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem name="TypeFilter" label="구분" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <m:MultiComboBox
+                                        name="TypeFilter"
+                                        selectionChange=".onFilterBarChange"
+                                    >
+                                        <c:Item key="Y" text="인턴"/>
+                                        <c:Item key="N" text="정규직"/>
+                                    </m:MultiComboBox>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                        </fb:filterGroupItems>
+                    </fb:FilterBar> -->
+                    <Table id='table'
+                        rows='{companyModel>/}'
+                        rowActionCount="1"
+                        sort="{companyModel>/Name}"
+                        selectionMode="MultiToggle"
+                    >
+                        <extension>
+                            <m:OverflowToolbar style="Clear">
+                                <m:Title id="table_title" text="{= '검색결과 : ' + ${oModel>/dataLength} +'명'}" titleStyle="H3" />
+                                <m:ToolbarSpacer></m:ToolbarSpacer>
+                                <m:Button icon="sap-icon://upload" press=".navToUpload" type="Default"></m:Button>
+                                <m:Button icon="sap-icon://excel-attachment" press="onExport"/>
+                                <m:Button text="생성" press=".onCreate"></m:Button>
+                                <m:Button text="삭제" press=".onDelete" type="Emphasized"></m:Button>
+                            </m:OverflowToolbar>
+                        </extension>
+                        <rowActionTemplate>
+                            <RowAction >
+                                <RowActionItem type="Navigation" press=".onMove"></RowActionItem>
+                            </RowAction>
+                        </rowActionTemplate>
+                        <columns>
+                            <Column sortProperty="Name" showSortMenuEntry="true">
+                                <m:Label text="성명" design="Bold"/>
+                                <template>
+                                    <m:Label text="{companyModel>Name}" />
+                                </template>
+                            </Column>
+                            <Column sortProperty="Buname" showSortMenuEntry="true">
+                                <m:Label text="부서명" design="Bold"/>
+                                <template>
+                                    <m:Label text="{companyModel>Buname}" />
+                                </template>
+                            </Column>
+                            <Column sortProperty="ViewNumber" showSortMenuEntry="true">
+                                <m:Label text="대표전화" design="Bold"/>
+                                <template>
+                                    <m:Label text="{companyModel>ViewNumber}" />
+                                </template>
+                            </Column>
+                            <Column sortProperty="Email" showSortMenuEntry="true">
+                                <m:Label text="이메일" design="Bold"/>
+                                <template>
+                                    <m:Label text="{companyModel>Email}" />
+                                </template>
+                            </Column>
+                            <Column sortProperty="Hiredate" showSortMenuEntry="true">
+                                <m:Label text="입사일" design="Bold"/>
+                                <template>
+                                    <m:Text text="{path : 'companyModel>Hiredate', type: 'sap.ui.model.odata.type.String'}" wrapping="false" />
+                                </template>
+                            </Column>
+                            <Column sortProperty="isIntern" showSortMenuEntry="true">
+                                <m:Label text="구분" design="Bold"/>
+                                <template>
+                                    <m:Text text="{companyModel>isIntern}" />
+                                </template>
+                            </Column>
+                        </columns>
+                    </Table>
+                    <m:Table id="exportTable" inset="false" items="{path:'companyModel>/'}" visible="false">
+                        <m:columns>
+                            <m:Column >
+                                <m:Text text="성명"/>
+                            </m:Column>
+                            <m:Column >
+                                <m:Text text="부서명"/>
+                            </m:Column>
+                            <m:Column >
+                                <m:Text text="휴대전화"/>
+                            </m:Column>
+                            <m:Column >
+                                <m:Text text="내선전화"/>
+                            </m:Column>
+                            <m:Column >
+                                <m:Text text="이메일"/>
+                            </m:Column>
+                            <m:Column >
+                                <m:Text text="입사일"/>
+                            </m:Column>
+                            <m:Column >
+                                <m:Text text="구분"/>
+                            </m:Column>
+                        </m:columns>
+                        <m:items>
+                            <m:ColumnListItem>
+                                <m:cells>
+                                    <m:Text text="{companyModel>Name}" />
+                                    <m:Text text="{companyModel>Buname}" />
+                                    <m:Text text="{companyModel>Mobile}" />
+                                    <m:Text text="{companyModel>Phone}" />
+                                    <m:Text text="{companyModel>Email}" />
+                                    <m:Text text="{companyModel>Hiredate}" />
+                                    <m:Text text="{companyModel>isIntern}" />
+                                </m:cells>
+                            </m:ColumnListItem>
+                        </m:items>
+                    </m:Table>
+                </m:content>
+            </m:Panel>
+        </m:content>
+    </m:Page>
+</mvc:View>

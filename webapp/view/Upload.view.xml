@@ -1,0 +1,67 @@
+<mvc:View 
+    controllerName="internwork.controller.Upload" 
+    xmlns:mvc="sap.ui.core.mvc" 
+    displayBlock="true" 
+    xmlns="sap.m"
+	xmlns:u="sap.ui.unified">
+        <Page id="page" title="{i18n>title}">
+            <customHeader>
+                <Bar>
+                    <contentMiddle>
+                        <Label text="Read Data From Excel"/>
+                    </contentMiddle>
+                    <contentRight>
+                        <u:FileUploader id="FileUploaderId" sameFilenameAllowed="true" iconOnly="false" buttonOnly="true" fileType="XLSX,xlsx"
+                            icon="sap-icon://upload" iconFirst="true" style="Emphasized" change="onUpload" width="10rem" buttonText="Upload"/>
+                    </contentRight>
+                </Bar>
+            </customHeader>
+            <Toolbar>
+                <SearchField
+                    width="100%"
+                    placeholder="Search..."
+                    search=".onSearch"
+                    liveChange=".onLiveChange"/>
+            </Toolbar>
+            <content>
+                <Table items="{localModel>/}" id="uploadTable">
+                        <columns>
+                            <Column >
+                                <Text text="성명"/>
+                            </Column>
+                            <Column >
+                                <Text text="부서명"/>
+                            </Column>
+                            <Column >
+                                <Text text="휴대전화"/>
+                            </Column>
+                            <Column >
+                                <Text text="내선전화"/>
+                            </Column>
+                            <Column >
+                                <Text text="이메일"/>
+                            </Column>
+                            <Column >
+                                <Text text="입사일"/>
+                            </Column>
+                            <Column >
+                                <Text text="구분"/>
+                            </Column>
+                        </columns>
+                    <items>
+                        <ColumnListItem>
+                            <cells>
+                                <Text text="{localModel>성명}" />
+                                <Text text="{localModel>부서명}" />
+                                <Text text="{localModel>휴대전화}" />
+                                <Text text="{localModel>내선전화}" />
+                                <Text text="{localModel>이메일}" />
+                                <Text text="{localModel>입사일}" />
+                                <Text text="{localModel>구분}" />
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+            </content>
+        </Page>
+</mvc:View>
